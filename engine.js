@@ -10,16 +10,9 @@ export function createGraph(data) {
   const indices = new Map(data.words.map((w,i) => [w,i]));
   return word => (data.neighbors[indices.get(word)] || []).map(i => data.words[i]);
 }
-export async function tiles(choices, current, target, solution, day) {
-  const next = solution[solution.indexOf(current) + 1];
-  const reserved = choices.filter(w => w === target || w === next);
-  const encoder = new TextEncoder();
-  const ranked = await Promise.all(choices.filter(w => !reserved.includes(w)).map(async word => {
-    const digest = await crypto.subtle.digest('SHA-256', encoder.encode(`${day}|${current}|${word}`));
-    return {word, rank:Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2,'0')).join('')};
-  }));
-  ranked.sort((a,b) => a.rank.localeCompare(b.rank) || a.word.localeCompare(b.word));
-  return [...reserved, ...ranked.slice(0,12-reserved.length).map(x => x.word)].sort();
+// Every synonym remains available, including branches outside the reference route.
+export function tiles(choices) {
+  return [...new Set(choices)].sort();
 }
 export function validPrefix(path, start, links) {
   if (!Array.isArray(path) || path[0] !== start) return [start];

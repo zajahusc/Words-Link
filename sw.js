@@ -1,4 +1,4 @@
-const CACHE='words-link-v1';
+const CACHE='words-link-v2';
 const ASSETS=['./','./index.html','./styles.css','./app.js','./engine.js','./icon.svg','./manifest.webmanifest','./data/Synonyms.json','./data/DailyChallenges.json','./data/Licenses.txt','./data/Provenance.json'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('words-link-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});

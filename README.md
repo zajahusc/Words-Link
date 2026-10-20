@@ -8,7 +8,9 @@ No build or dependencies required. Run `python3 -m http.server 8080` in this fol
 
 ## Play
 
-Link synonyms from the start to the goal. Normal mode shows the same deterministic selection of up to 12 tiles as iOS; Hard accepts any valid synonym from the bundled graph. Long press or right click a tile to open a dictionary lookup. Undo and restart remain available until the first completion. A reveal permanently marks that day's attempt assisted.
+Link synonyms from the start to the goal. Normal mode exposes every available synonym, with a filter for lists larger than 12; Hard accepts any valid synonym from the bundled graph. Long press or right click a tile to open a dictionary lookup. Undo and restart remain available until the first completion. A reveal permanently marks that day's attempt assisted.
+
+Any valid synonym route to the goal counts, including routes that depart from the revealed example. Par is the shortest route and ranges from 3–10 intermediate bridge words; longer player routes are allowed and receive the existing efficiency adjustment.
 
 Daily puzzles reset at midnight America/New_York, including daylight saving changes. The bundled schedule runs October 20, 2026 through June 30, 2027; add verified dated routes to data/DailyChallenges.json to extend it. Dates outside the schedule show an explicit unavailable message.
 
@@ -18,7 +20,7 @@ The service worker caches the game and full word dictionary for offline play aft
 
 ## Test
 
-With Node.js 22 or newer: `npm test`. Tests check all scheduled routes and shortest path lengths, New York rollover, scoring, deterministic tiles, save validation and spoiler-free sharing. The GitHub Pages workflow runs them before deploying.
+With Node.js 22 or newer: `npm test`. Tests check all scheduled routes and shortest path lengths, New York rollover, scoring, complete synonym choices, save validation and spoiler-free sharing. The GitHub Pages workflow runs them before deploying.
 
 ## Publish
 

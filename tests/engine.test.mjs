@@ -29,13 +29,15 @@ test('all daily routes exist and their par is the shortest path',()=>{
  assert.equal(distance,route.length-1,date);
  }
 });
-test('tile samples preserve solution and are deterministic',async()=>{
- for(const {date,route}of schedule.slice(0,30))for(let i=0;i<route.length-1;i++){
+test('every available synonym is selectable, including alternatives to the reference route',()=>{
+ for(const {route}of schedule)for(let i=0;i<route.length-1;i++){
  const choices=links(route[i]).filter(w=>!route.slice(0,i+1).includes(w));
- const selected=await tiles(choices,route[i],route.at(-1),route,date);
- assert.ok(selected.includes(route[i+1]));assert.ok(selected.length<=12);
- assert.deepEqual(selected,await tiles(choices,route[i],route.at(-1),route,date));
+ const selected=tiles(choices);
+ assert.ok(selected.includes(route[i+1]));
+ assert.deepEqual(selected,[...choices].sort());
  }
+ const many=Array.from({length:30},(_,i)=>`word${i}`);
+ assert.equal(tiles(many).length,30);
 });
 test('saved invalid paths are truncated and shares contain no answer',()=>{
  const route=schedule[0].route;
