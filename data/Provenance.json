@@ -1,0 +1,20 @@
+{
+  "source": "https://en-word.net/downloads/english-wordnet-2025.xml.gz",
+  "sourceSHA256": "9ca6d1dcb75f822fdd66617f7d9da48142ace38dd544d6ad5e2feca1674ad3fe",
+  "databaseSHA256": "789eec492bd3bd768c0def75eb49b17b18dae53983211267748447055bf75e55",
+  "words": 40320,
+  "directedSynonymEdges": 131134,
+  "bundledBytes": 1298361,
+  "gzipBytesForComparison": 439830,
+  "verifiedReachableGoalsWith3To10BridgeWords": {
+    "bright": 18121,
+    "clear": 16470,
+    "light": 17063,
+    "strong": 17886,
+    "calm": 18053,
+    "quick": 18038
+  },
+  "contentPolicy": "PG: curated exclusions plus dictionary-labeled slurs and vulgar terms, across all senses",
+  "excludedWordCount": 241,
+  "modifications": "Synset-only graph; single lowercase alphabetic words; PG content filter; no definitions or other semantic relations."
+}
