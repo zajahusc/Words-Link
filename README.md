@@ -22,7 +22,7 @@ With Node.js 22 or newer: `npm test`. Tests check all scheduled routes and short
 
 ## Publish
 
-The included GitHub Actions workflow deploys the repository root to GitHub Pages. Set repository Settings → Pages → Source to GitHub Actions, then run the Deploy Words Link workflow. The expected address for zajahusc/Words-Link is https://zajahusc.github.io/Words-Link/.
+The included GitHub Actions workflow deploys the repository root to GitHub Pages. Set repository Settings → Pages → Source to GitHub Actions, set the repository Actions variable `ENABLE_PAGES` to `true`, then run the Deploy Words Link workflow. GitHub Pages requires a public repository on GitHub Free, or a paid plan that supports Pages for private repositories. Tests run on every push even when Pages deployment is disabled. The expected address for zajahusc/Words-Link is https://zajahusc.github.io/Words-Link/.
 
 When changing cached files, bump CACHE in sw.js. A new service worker activates after older tabs close. All asset URLs are relative, including deployment under a repository subpath.
 
