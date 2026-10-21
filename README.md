@@ -2,32 +2,51 @@
 
 A responsive web edition of the Words Link iOS game. Warm paper, serif headlines, tactile synonym tiles, and a yellow destination. Plays on desktop, Android, iPhone, and iPad browsers.
 
-## Run
+## Run locally
 
-No build or dependencies required. Run `python3 -m http.server 8080` in this folder, then open http://localhost:8080. Serve over HTTPS in production for offline caching, native sharing, and clipboard access. Do not open index.html directly from disk.
+With Node.js 22.12 or newer:
 
-## Play
+```sh
+npm ci
+npm run setup:secrets
+npm start
+```
 
-Link synonyms from the start to the goal. Normal mode exposes every available synonym, with a filter for lists larger than 12; Hard accepts any valid synonym from the bundled graph. Long press or right click a tile to open a dictionary lookup. Undo and restart remain available until the first completion. A reveal permanently marks that day's attempt assisted.
+Open http://127.0.0.1:8081. The default configuration uses the bundled WordNet data and requires no API key. The new local server supports the same backend routes as production and serves only the explicit public build. Put server secrets in the ignored `.env.local`, never in client files.
 
-Any valid synonym route to the goal counts, including routes that depart from the revealed example. Par is the shortest route and ranges from 3–10 intermediate bridge words; longer player routes are allowed and receive the existing efficiency adjustment.
+## Merriam-Webster integration
 
-Daily puzzles reset at midnight America/New_York, including daylight saving changes. The bundled schedule runs October 20, 2026 through June 30, 2027; add verified dated routes to data/DailyChallenges.json to extend it. Dates outside the schedule show an explicit unavailable message.
+The backend, sense-specific synonym parser, verified puzzle generator, persistent dictionary storage, and browser integration are implemented. **Activation still requires the operator's Merriam-Webster permissions, API key, and Netlify account.** No Merriam-Webster data or key is committed to this repository.
 
-Scoring matches iOS: 100 + 10 × par + max(0, 50 − 10 × extra bridge words), doubled for Hard; assisted solves earn zero. Daily progress and history use localStorage, with updates across tabs. Browser data does not sync with iCloud or other devices. Clearing browser data removes it.
+See [the complete setup guide](docs/MERRIAM-WEBSTER-SETUP.md) for the exact secret settings, one-time preparation command, review and midnight activation. Import the repository into Netlify using the checked-in `netlify.toml`. The existing WordNet game remains available until the new provider is ready.
 
-The service worker caches the game and full word dictionary for offline play after the first successful load. Definitions are external Wiktionary lookups and need internet access. Interface colors follow the system light/dark setting. Home screen installation depends on browser support.
+The protected preparation task uses strict synonyms with their shared definitions, excludes labeled uncommon senses, and generates immutable daily challenges with verified shortest routes. During gameplay the browser uses this prepared graph; individual player moves do not consume API requests. Hard mode accepts any available synonym from the same graph as Normal mode. Merriam-Webster licensing must cover generation, storage and offline distribution.
 
-## Test
+## Play and scoring
 
-With Node.js 22 or newer: `npm test`. Tests check all scheduled routes and shortest path lengths, New York rollover, scoring, complete synonym choices, save validation and spoiler-free sharing. The GitHub Pages workflow runs them before deploying.
+Normal mode exposes every available synonym, with a filter for lists larger than 12. Hold or right-click a tile to explore its meaning. With the new provider, the game explains the shared sense directly; legacy WordNet tiles use an external dictionary lookup. Undo and restart remain available until the first completion. Revealing permanently marks that day's attempt assisted.
 
-## Publish
+Every valid route in the game's selected dictionary counts, including routes that depart from the revealed example. Par is the shortest route and ranges from 3–10 intermediate bridge words. Longer player routes are allowed.
 
-The included GitHub Actions workflow deploys the repository root to GitHub Pages. Set repository Settings → Pages → Source to GitHub Actions, set the repository Actions variable `ENABLE_PAGES` to `true`, then run the Deploy Words Link workflow. GitHub Pages requires a public repository on GitHub Free, or a paid plan that supports Pages for private repositories. Tests run on every push even when Pages deployment is disabled. The expected address for zajahusc/Words-Link is https://zajahusc.github.io/Words-Link/.
+Daily puzzles reset at midnight America/New_York, including daylight saving changes. The legacy schedule runs October 20, 2026 through June 30, 2027. New Merriam-Webster schedules are prepared and verified separately; neither provider fabricates routes when its schedule ends.
 
-When changing cached files, bump CACHE in sw.js. A new service worker activates after older tabs close. All asset URLs are relative, including deployment under a repository subpath.
+Scoring: `100 + 10 × par + max(0, 50 − 10 × extra bridge words)`, doubled for Hard; assisted solves earn zero. Daily progress and history stay in localStorage and update across tabs. Browser data does not sync with iCloud or other devices. Clearing browser data removes it. Hosting changes retain scores only when the site's exact origin (scheme and hostname) stays the same.
+
+The service worker caches public game assets and an approved dictionary snapshot for offline play after a successful online load. New versions require an online update. Color theme follows the device's light/dark setting.
+
+## Test and build
+
+```sh
+npm test
+npm run build
+```
+
+Tests cover provider parsing and secret redaction, protected setup, durable request limits, immutable data, both-direction connections, verified shortest routes, New York rollover, scoring, dictionary migration, and complete synonym choices. They use synthetic API fixtures and make no live Merriam-Webster requests.
+
+`dist` contains public assets only. Environment files, server code, dependencies, tests and private storage are excluded. Both Netlify and the optional GitHub Pages Actions deployment use this build. GitHub Pages supports only the legacy static game; it cannot run the Merriam-Webster backend. Leave it working while preparing the Netlify migration.
 
 ## Credits
 
-The original app's Open English WordNet 2025 dictionary and daily schedule are reused unchanged. See data/Licenses.txt and data/Provenance.json for contributor attribution, CC BY 4.0 terms, Princeton WordNet license and dataset derivation. No analytics, accounts, purchases, or API keys are needed.
+Legacy dictionary: Open English WordNet 2025, derived from Princeton WordNet. See data/Licenses.txt and data/Provenance.json for attribution and terms.
+
+The optional new dictionary uses Merriam-Webster's Collegiate Thesaurus under the operator's approved license. Confirm required attribution before activation. Existing source notices remain available for legacy sessions.
